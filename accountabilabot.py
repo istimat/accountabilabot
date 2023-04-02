@@ -11,14 +11,14 @@ redis = redis.Redis(connection_pool=pool)
 @bot.message_handler(commands=['start'])
 def start(message):
     
-    redis.hset(message.from_user.username, 'goal', '')
-    redis.hset(message.from_user.username, 'points', 0)
+    # redis.hset(message.from_user.username, 'goal', '')
+    # redis.hset(message.from_user.username, 'points', 0)
     
     
     markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row("Set a goal")
     markup.row("Update progress")
-    markup.row("Scoreboard")
+    markup.row("Stats")
     
     bot.send_message(message.chat.id, 'Welcome to the accountability bot!\n\n'
                      'Please choose an option:',
@@ -34,7 +34,7 @@ def handle_menu(message):
     if message.text == "Update progress":
         update_progress(message)
         print("updating progress")
-    if message.text == "Leaderboard":
+    if message.text == "Stats":
         leaderboard()
 
 def ask_for_goal(message):
@@ -48,15 +48,33 @@ def set_goal(message):
     # redis.set('mykey', 'Hello from Python!')
     redis.hset(message.from_user.username, 'goal', message.text)
     
+    bot.send_message(message.chat.id, f'Your goal "{message.text}" has been set.')
+                     
+    
     # Add points for setting a goal
     redis.hincrby(message.from_user.username, 'points', 10)
+    
+    # bot.register_next_step_handler(message, set_frequency)
+    set_frequency(message)
+    
+    
+def set_frequency(message):
+    
+    markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    markup.row("Minutely")
+    markup.row("Daily")
+    markup.row("Weekly")
 
     # Send a confirmation message
-    bot.send_message(message.chat.id, f'Your goal "{message.text}" has been set. '
-                     'Please update your progress regularly.')
+    bot.send_message(message.chat.id,"How often do you want to update your progress?", reply_markup=markup)
+
+    
+    print(message.text)
+    redis.hset(message.from_user.username, 'freq', message.text)
+
 
     # Move to the UPDATE state
-    bot.register_next_step_handler(message, update_progress)
+    # bot.register_next_step_handler(message, update_progress)
 
 # Define the update_progress function
 def update_progress(message):
@@ -82,7 +100,7 @@ def update_progress(message):
 
 
 # Define the leaderboard function
-@bot.message_handler(commands=['leaderboard'])
+@bot.message_handler(commands=['stats'])
 def leaderboard(message):
     # Get all user data
     user_data = bot.user_data
@@ -106,4 +124,5 @@ def cancel(message):
     bot.send_message(message.chat.id, 'Canceled.')
 
 # Start the bot
-bot.polling()
+# bot.polling()
+bot.infinity_polling()
