@@ -1,6 +1,6 @@
 # Accountabilabot
 
-A telegram bot that helps be consistent in progressing towards your goals.
+A telegram bot that helps you be consistent in progressing towards your goals.
 
 ## Dependencies
 
@@ -9,6 +9,7 @@ A telegram bot that helps be consistent in progressing towards your goals.
 
 You can:
 `pip install redis`
+
 `pip install pyTelegrambotAPI`
 
 Or just run:
@@ -30,4 +31,17 @@ Now that the redis database server is running, the accountabilabot can be starte
 
 `python3 accountablilabot.py`
 
+## Bot usage
+
+To reach the bot, open Telegram and search for the bot called AM_accountabilabot
+Once in a chat with the bot you can type:
+
+`/start`
+For an interactive inline keyboard
+
+`/reset`
+To erase your goal and score
+
+`/dump`
+To get a dump of all the database values stored for the current username
 
