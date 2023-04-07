@@ -18,8 +18,6 @@ reminder_thread.start()
 @bot.message_handler(commands=['start'])
 def start(message):
     
-    # redis.hset(message.from_user.username, 'goal', '')
-    # redis.hset(message.from_user.username, 'points', 0)
     
     markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
     markup.row("Set a goal")
