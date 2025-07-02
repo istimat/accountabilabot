@@ -6,7 +6,7 @@ import update_watcher
 
 
 
-bot = telebot.TeleBot('5988436185:AAEoKsx1czluS7Ih6VM7vn82xhjqbr0SYcg')
+bot = telebot.TeleBot('TOKEN')
 
 redis = redis.StrictRedis(host='localhost', port=6379, db=0, charset="utf-8", decode_responses=True)
 # redis = redis.Redis(connection_pool=pool)
